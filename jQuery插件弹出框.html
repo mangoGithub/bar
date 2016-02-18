@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script src="jquery-1.8.2.min.js" language="javascript"></script>
+<title>海北绿园后门</title>
+<style>
+*{padding:0px; margin:0px;}
+.mask{width:100%; height:1000px; background:#333;
+ position:absolute; top:0px; left:0px;
+ filter:alpha(opacity=80); /*IE滤镜，透明度50%*/
+-moz-opacity:0.8; /*Firefox私有，透明度50%*/
+opacity:0.8;/*其他，透明度50%*/ display:none;}
+.LoginBox{
+position:fixed;
+left: 460px;
+top: 150px;
+background: white;
+width: 426px;
+height: 282px;
+border: 3px solid #444;
+border-radius: 7px;
+z-index: 10000; display:none;}
+.LoginClose{color:red; float:right;}
+.LoginTit{
+float:left;
+}
+.LoginBox h2{font-size:14px; border-radius: 7px; padding:0px 10px; font-weight:bold; height:40px; line-height:40px; background:#FFC;}
+.LoginLay{ padding:0px 10px;}
+.clear:after{content:'.';height:0px; overflow:hidden; visibility:hidden; display:block; clear:both;}
+	#catagory{list-style:none; margin:20px auto;}
+	#catagory li{height:40px; border-bottom:1px solid #ccc;}
+	#catagory li a{ font:20px/40px; color:#999; font-weight:bold;}
+
+</style>
+</head>
+
+<body style="height:1000px">
+<input type="button" value="弹出" id="aaa"/>
+<div class="mask"></div>
+<div class="LoginBox">
+	<h2 class="clear">
+		<a href="javascript:;" class="LoginClose">关闭</a>
+        <span class="LoginTit">用户登录框</span>
+    </h2>
+    <div class="LoginLay">
+    
+    </div>
+</div>
+</body>
+</html>
+<script language="javascript">
+
+$.fn.extend({
+	//起名字要用json
+	showBox:function(options){
+		var defaults = {
+			txt:'',
+			title:'',
+			wid:426,
+			h:282
+		}
+		var options = $.extend(defaults,options);
+		return this.each(function(){
+			var o = options;
+			var obj = $(this);
+			var colose = $('h2 a');
+			var title = $('h2 span');
+			var div = obj.children('div');
+			var prevDiv = obj.prev();
+			var iH = $(document).height();
+			obj.css({'width':o.wid,'height':o.h}).show();
+			prevDiv.css('height',iH).show();
+			colose.click(function(){
+				obj.hide()&&prevDiv.hide();
+			});
+			title.text(o.title);
+			div.html(o.txt);
+		});
+	}
+});
+$.fn.extend({
+	paddingLeft:function(options){
+		var defaults ={
+			animateLeft:10,
+			wordColor:'red'	
+		}
+		var options = $.extend(defaults,options);
+		return this.each(function(){
+			var o = options;
+			var obj = $(this);
+			var items = $('li a',obj);
+			items.hover(
+				function(){
+					$(this).css('color',o.wordColor);
+					$(this).animate({"padding-left":o.animateLeft},{queue: false, duration: 300 });	
+				},
+				function(){
+					$(this).css('color','');
+					$(this).animate({"padding-left":0},{queue: true, duration: 300} );	
+				}
+			);
+		});
+	}
+});	
+$.fn.extend({
+	draw :function(options){
+		var defaults ={
+				
+		};
+		var options = $.extend(defaults,options);
+		return this.each(function(){
+			var obj = $(this);
+			obj.mousedown(function(ev){
+				var disX = ev.clientX - obj.offset().left;
+				var disY = ev.clientY - obj.offset().top;
+				$(document).mousemove(function(ev){
+					obj.css({
+						left : ev.clientX - disX,
+						top : ev.clientY - disY
+					});
+				});
+				$(document).on('mouseup', function() {
+					$(document).off('mousemove mouseup');
+				});
+				ev.preventDefault();
+			})	
+		});
+	}
+})
+/*if (move_num < -(client_height / 2)) {
+							$(this).css({
+								"-webkit-transform": "translateX(-100%)",
+							});
+				 
+						} else if (move_num > 0) {
+							$(this).css({
+								"-webkit-transform": "translateX(0%)",
+							});
+						} else {
+							$(this).css({
+								"-webkit-transform": "translateX(0%)",
+							});
+				 
+						}*/
+		 
+jQuery(function($){
+	var str ='<ul id="catagory"><li><a href="#">jQuery</a></li><li><a href="#">Asp.net</a></li>     <li><a href="#">Sql Server</a></li>   <li><a href="#">CSS</a></li> </ul>';
+	$('#aaa').click(function(){
+		$('.LoginBox').showBox({txt:str,title:'登录kuang'});
+		$('.LoginBox').draw();
+		$("#catagory").paddingLeft({animateLeft: 50, wordColor: "blue" });
+	});
+	
+})
+</script>
