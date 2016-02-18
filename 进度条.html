@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>进度条</title>
+</head>
+<style>
+*{padding:0px; margin:0px;}
+em{font-style:normal;}
+.bar{width:500px; height:15px; line-height:15px; margin:300px auto; position:relative;border:1px solid #eee; overflow:hidden; border-radius:15px;text-align:center; background:#999}
+.bar span{display:block; height:15px; background:#09F; position:absolute; top:0px; left:0px;}
+.bar em{font-size:12px; color:#fff; position:absolute; display:block;width:100%; line-height:15px;}
+#aa img{width:300px;}
+</style>
+<body>
+<div class="bar"><span></span><em></em></div>
+<div id="aa" style="display:none;">
+<img src="http://img1.gamedog.cn/2012/10/25/24-1210251100250.gif"/>
+<img src="http://img1.gamedog.cn/2012/10/25/24-1210251100240-50.gif"/>
+<img src="http://www.714.hk/data/attachment/forum/201403/17/124444nb28krplwkrl8y28.gif"/>
+<img src="http://img1.gamedog.cn/2013/11/28/43-13112Q042200.gif"/>
+<img src="http://img1.gamedog.cn/2012/10/25/24-1210251100270.gif"/>
+<img src="http://i770.photobucket.com/albums/xx347/wuseyihuacai/hard%20to%20say/sa.gif"/>
+</div>
+</body>
+</html>
+<script src="dome/jquery-1.8.2.min.js"></script>
+<script>
+
+var arrImg=[
+ 'http://img1.gamedog.cn/2012/10/25/24-1210251100250.gif',
+'http://img1.gamedog.cn/2012/10/25/24-1210251100240-50.gif',
+'http://www.714.hk/data/attachment/forum/201403/17/124444nb28krplwkrl8y28.gif',
+'http://img1.gamedog.cn/2013/11/28/43-13112Q042200.gif',
+'http://img1.gamedog.cn/2012/10/25/24-1210251100270.gif',
+'http://i770.photobucket.com/albums/xx347/wuseyihuacai/hard%20to%20say/sa.gif'
+]
+var oImage = new Image();
+var scale=0,iCur =0,iNow = 0;
+var iTime=null;
+xun();
+
+function xun(){
+	oImage.src = arrImg[iCur];
+	oImage.onload = function(){
+		iCur ++;
+		if( iCur < arrImg.length){
+			xun();
+		}
+		scale = Math.floor( iCur/arrImg.length*100);
+		clearInterval(iTime);
+		iTime = setInterval(function(){
+			if(scale != 0 && iNow < scale){
+				iNow++;
+				if(iNow == 100){
+					 clearInterval(iTime);
+					 $('#aa').show();
+					 $('.bar').hide();
+				}
+				$('.bar em').text(iNow +'%');
+				$('.bar span').css('width',iNow + '%');
+				//console.log(iNow);
+			}
+		},100);
+	} 
+	oImage.onerror = function(){
+		alert('图片路径有误，请查看图片路径数组！');
+		clearInterval(iTime);
+	}
+}
+
+
+</script>
